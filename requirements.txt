@@ -1,0 +1,7 @@
+pandas
+scipy
+numba
+scikit-learn
+matplotlib
+seaborn
+adjustText
