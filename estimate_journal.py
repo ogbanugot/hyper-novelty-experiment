@@ -307,6 +307,7 @@ def estimate(G, times, K=20, thetas=None, nepochs=5, subepochs=10, batchsize=100
                               rand_edges_in, rand_nodes, rand_nodes_in)
                     likelihoods.append(l / len(samples))
             if outfile:
+                print(likelihoods)
                 outfile.write('log-lik: {:.2f} | Elapsed {:.2f} s\n'.format(likelihoods[-1], tic.check()))
                 outfile.flush()
             time_index += 1
