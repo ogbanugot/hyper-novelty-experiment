@@ -83,7 +83,8 @@ paper_dates = load_date('paper_dates.pkl')
 # G = G[paper_dates < 2010, :]
 # paper_dates = paper_dates[paper_dates < 2010]
 # paper_dates[paper_dates < 1950] = 1950
-
+year_counts = Counter(paper_dates)
+print("year_counts", year_counts)
 
 def get_nodes(e):
     global G0
@@ -234,6 +235,7 @@ def estimate(G, times, K=20, thetas=None, nepochs=5, subepochs=10, batchsize=100
 
     tic.go('Estimating...')
     candidate_times = np.unique(times)
+    print("canditate times: ", candidate_times)
     if thetas is None:
         theta = np.random.dirichlet([0.5] * K, size=G.shape[1])
         thetas = [cuda.to_device(theta)]
@@ -257,8 +259,10 @@ def estimate(G, times, K=20, thetas=None, nepochs=5, subepochs=10, batchsize=100
                 thetas.append(copy(thetas[-1]))
             G0 = G[(times == t).nonzero()[0], :]
             active_nodes = G0.sum(axis=0).A.ravel().nonzero()[0]
+            print("active_nodes", active_nodes)
             G0 = G0[:, active_nodes]
             G0.data = np.ones_like(G0.data)
+            print("G0", G0)
             E0 = get_hyperedges()
             N = len(active_nodes)
             V = range(N)
@@ -270,7 +274,6 @@ def estimate(G, times, K=20, thetas=None, nepochs=5, subepochs=10, batchsize=100
             if outfile:
                 outfile.write("Epoch {} | Time: {} | Nodes: {} | Edges: {} | ".format(epoch, t, N, len(E0)))
                 outfile.flush()
-
             for subepoch in range(subepochs):
                 for batch_indx, batch in enumerate(batch_generator(E0.items(), batchsize)):
                     print(

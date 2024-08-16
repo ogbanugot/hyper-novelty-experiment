@@ -1,0 +1,1 @@
+Epoch 0 | Time: 2019 | Nodes: 2 | Edges: 0 | 
